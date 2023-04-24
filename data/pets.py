@@ -16,4 +16,6 @@ class Pets(SqlAlchemyBase):
     sleep = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     happiness = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     birthday = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
+    master_username = sqlalchemy.Column(sqlalchemy.Integer,
+                                sqlalchemy.ForeignKey("users.name"))
     user = orm.relationship('User')
