@@ -1,6 +1,5 @@
 import datetime
 import sqlalchemy
-from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
 
@@ -13,9 +12,8 @@ class Pets(SqlAlchemyBase):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     age = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     feed = sqlalchemy.Column(sqlalchemy.Integer, default=0)
+    hunger = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     sleep = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     happiness = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     birthday = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
-    master_username = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("users.name"))
-    user = orm.relationship('User')
+    master_username = sqlalchemy.Column(sqlalchemy.String)

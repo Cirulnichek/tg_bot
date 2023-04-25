@@ -1,7 +1,6 @@
 import sqlalchemy
 
 from .db_session import SqlAlchemyBase
-from sqlalchemy import orm
 
 
 class User(SqlAlchemyBase):
@@ -10,4 +9,4 @@ class User(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    pets = orm.relationship("Pets", back_populates='user')
+    chat_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
