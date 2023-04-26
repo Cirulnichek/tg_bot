@@ -7,7 +7,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import datetime
 from random import choice
 
-from sates.init import Init
+from states.init import Init
 
 import logging
 import config
@@ -132,7 +132,7 @@ async def check_status(master_username):
     if pet.feed <= -100:
         await bot.send_message(chat_id=chat_id, text='К сожалению ваш питомец умер от голода(')
         session.delete(pet)
-    if pet.feef > 500:
+    if pet.feed > 500:
         await bot.send_message(chat_id=chat_id, text='Вы перекормили своего питомца и он умер от ожирения')
         session.delete(pet)
     # счастье
@@ -220,7 +220,7 @@ async def static(message: types.Message):
 
 
 @dp.message_handler(commands='help', state=None)
-async def static(message: types.Message):
+async def help(message: types.Message):
     await message.answer('Команды:\n'
                          'start - создание нового питомца\n'
                          'sleep - сон питомца\n'
@@ -228,6 +228,78 @@ async def static(message: types.Message):
                          'feed - кормление\n'
                          'static - статистика\n'
                          'kill - убить питомца')
+
+
+@dp.message_handler(commands='change_hunger', state=None)
+async def change_hunger(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    pet.hunger = not pet.hunger
+    session.commit()
+
+
+@dp.message_handler(commands='hunger', state=None)
+async def hunger(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    await message.answer(pet.hunger)
+    session.commit()
+
+
+@dp.message_handler(commands='minus_feed', state=None)
+async def minus_feed(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    pet.feed -= 150
+    session.commit()
+
+
+@dp.message_handler(commands='plus_feed', state=None)
+async def plus_feed(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    pet.feed += 150
+    session.commit()
+
+
+@dp.message_handler(commands='minus_sleep', state=None)
+async def minus_sleep(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    pet.sleep -= 150
+    session.commit()
+
+
+@dp.message_handler(commands='plus_sleep', state=None)
+async def plus_sleep(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    pet.sleep += 150
+    session.commit()
+
+
+@dp.message_handler(commands='minus_happiness', state=None)
+async def minus_happiness(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    pet.happiness -= 150
+    session.commit()
+
+
+@dp.message_handler(commands='plus_happiness', state=None)
+async def plus_happiness(message: types.Message):
+    session = db_session.create_session()
+    master_username = message.from_user.username
+    pet = session.query(Pets).filter(Pets.master_username == master_username).first()
+    pet.happiness += 150
+    session.commit()
 
 
 if __name__ == "__main__":
